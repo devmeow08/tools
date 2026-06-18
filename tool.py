@@ -18,7 +18,7 @@ from dataclasses import dataclass
 # ==================================================
 # Ilagay mo dito ang link mo, at HINDI NA ITO GAGALAWIN KAHIT ANO PANG GAWIN MO
 # Ito ang link na binigay mo:
-UPDATE_URL = "https://gist.githubusercontent.com/devmeow08/cb6d54a46c4ee49990d26d9a8f453117/raw/0e1770242ffaddaa00d683afbad278aa73f60ad8/tool.py"
+UPDATE_URL = "https://raw.githubusercontent.com/devmeow08/tool.py/refs/heads/main/tool.py"
 # ==================================================
 
 # ==================================================
