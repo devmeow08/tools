@@ -1,0 +1,14 @@
+1. make a files named (updater.py)
+and put this in side
+
+import os
+print("[SECURE UPDATE CHECK]")
+os.system("git pull")
+
+print("[STARTING SYSTEM]")
+os.system("python project.py")
+
+then save and close
+====================
+and run this promp in termux 
+python updater.py
