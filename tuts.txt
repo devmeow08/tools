@@ -2,11 +2,12 @@
 and put this in side
 
 import os
+
 print("[SECURE UPDATE CHECK]")
 os.system("git pull")
 
 print("[STARTING SYSTEM]")
-os.system("python project.py")
+os.system("python loader.py")
 
 then save and close
 ====================
